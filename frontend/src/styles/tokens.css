@@ -1,0 +1,110 @@
+/*
+ * Verdict AI — Design Tokens
+ * Single source of truth. Nothing downstream hardcodes hex.
+ *
+ * Theme: football pitch — green / white / black
+ * Broadcast-grade: confident, not neon, accessible contrast.
+ */
+
+:root {
+
+  /* ── Raw palette ──────────────────────────────────────────────────────────
+   * Named after what they ARE, not where they're used.
+   * Don't use these directly in components — use semantics below.
+   */
+  --color-black:        #060c07;   /* near-black, faint green cast     */
+  --color-pitch-dark:   #0d1a0e;   /* deep pitch shadow                */
+  --color-pitch-mid:    #152416;   /* mid-surface, lit turf             */
+  --color-green-700:    #2e6b2e;   /* broadcast pitch green, dark       */
+  --color-green-600:    #3a7a3a;   /* broadcast pitch green, base       */
+  --color-green-500:    #4d9e4d;   /* lighter / hover state             */
+  --color-green-900:    #162916;   /* very dark green for tinted panels */
+  --color-white:        #ffffff;   /* pitch line white                  */
+  --color-offwhite:     #f0f4f0;   /* primary text — slight warm green  */
+  --color-grey-green:   #7a9e7a;   /* muted greenish secondary text     */
+  --color-dim-green:    #3d5a3d;   /* very dim — disabled / captions    */
+  --color-goal:         #16a34a;   /* goal celebration green            */
+  --color-save:         #dc2626;   /* save / error red                  */
+
+  /* ── Semantic tokens ──────────────────────────────────────────────────────
+   * Use THESE in components. Rename colour roles, not hex values.
+   */
+
+  /* Backgrounds */
+  --bg:           var(--color-black);
+  --surface:      var(--color-pitch-dark);
+  --surface-card: var(--color-pitch-mid);
+
+  /* Accent */
+  --pitch-green:  var(--color-green-600);
+
+  /* Text */
+  --line-white:   var(--color-white);
+  --text:         var(--color-offwhite);
+  --text-muted:   var(--color-grey-green);
+  --text-dim:     var(--color-dim-green);
+
+  /* Interactive */
+  --accent:           var(--color-green-600);
+  --accent-hover:     var(--color-green-500);
+  --accent-dark:      var(--color-green-700);
+
+  /* Borders */
+  --border:           rgba(255, 255, 255, 0.07);
+  --border-active:    var(--color-green-600);
+  --border-subtle:    rgba(58, 122, 58, 0.25);
+
+  /* Outcomes */
+  --goal:  var(--color-goal);
+  --save:  var(--color-save);
+
+  /* ── Typography ───────────────────────────────────────────────────────────
+   * Two faces: display (condensed, sporty) + body (readable, clean).
+   */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* Scale — rem */
+  --text-2xs:  0.625rem;   /* 10px */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.375rem;   /* 22px */
+  --text-2xl:  1.75rem;    /* 28px */
+  --text-3xl:  2.25rem;    /* 36px */
+  --text-4xl:  3rem;       /* 48px */
+  --text-5xl:  4rem;       /* 64px */
+
+  /* Weights */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-black:    800;
+
+  /* Letter-spacing for condensed display */
+  --ls-display:  0.02em;
+  --ls-upper:    0.08em;
+
+  /* ── Spacing ──────────────────────────────────────────────────────────────*/
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+
+  /* ── Radius ───────────────────────────────────────────────────────────────
+   * Broadcast UI: angular. No pill shapes.
+   */
+  --radius-sm: 2px;
+  --radius:    4px;
+  --radius-lg: 6px;
+
+  /* ── Shadows ──────────────────────────────────────────────────────────────*/
+  --shadow-card:   0 2px 16px rgba(0, 0, 0, 0.5);
+  --shadow-button: 0 2px 12px rgba(46, 107, 46, 0.4);
+}

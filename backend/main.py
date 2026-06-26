@@ -9,7 +9,9 @@ app = FastAPI(title="Verdict AI", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],   # Vite dev server
+    # Dev-only: allow localhost and 127.0.0.1 on any port so Vite's
+    # port-shifting (5173 → 5174 → …) never breaks the OPTIONS preflight.
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_methods=["*"],
     allow_headers=["*"],
 )

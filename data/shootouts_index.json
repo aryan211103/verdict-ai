@@ -1,0 +1,290 @@
+[
+  {
+    "match_id": 3922240,
+    "competition": "African Cup of Nations",
+    "season": "2023",
+    "match_label": "Egypt vs Congo DR",
+    "kicks": 18,
+    "goals": 15
+  },
+  {
+    "match_id": 3922658,
+    "competition": "African Cup of Nations",
+    "season": "2023",
+    "match_label": "Cape Verde Islands vs South Africa",
+    "kicks": 9,
+    "goals": 3
+  },
+  {
+    "match_id": 3923880,
+    "competition": "African Cup of Nations",
+    "season": "2023",
+    "match_label": "South Africa vs Congo DR",
+    "kicks": 14,
+    "goals": 11
+  },
+  {
+    "match_id": 3922837,
+    "competition": "African Cup of Nations",
+    "season": "2023",
+    "match_label": "Nigeria vs South Africa",
+    "kicks": 9,
+    "goals": 6
+  },
+  {
+    "match_id": 3922242,
+    "competition": "African Cup of Nations",
+    "season": "2023",
+    "match_label": "Senegal vs C\u00f4te d'Ivoire",
+    "kicks": 10,
+    "goals": 9
+  },
+  {
+    "match_id": 2302764,
+    "competition": "Champions League",
+    "season": "2004/2005",
+    "match_label": "AC Milan vs Liverpool",
+    "kicks": 8,
+    "goals": 5
+  },
+  {
+    "match_id": 18237,
+    "competition": "Champions League",
+    "season": "2011/2012",
+    "match_label": "Bayern Munich vs Chelsea",
+    "kicks": 10,
+    "goals": 7
+  },
+  {
+    "match_id": 18243,
+    "competition": "Champions League",
+    "season": "2015/2016",
+    "match_label": "Real Madrid vs Atl\u00e9tico Madrid",
+    "kicks": 9,
+    "goals": 8
+  },
+  {
+    "match_id": 3943076,
+    "competition": "Copa America",
+    "season": "2024",
+    "match_label": "Canada vs Uruguay",
+    "kicks": 9,
+    "goals": 7
+  },
+  {
+    "match_id": 3942415,
+    "competition": "Copa America",
+    "season": "2024",
+    "match_label": "Uruguay vs Brazil",
+    "kicks": 9,
+    "goals": 6
+  },
+  {
+    "match_id": 3942229,
+    "competition": "Copa America",
+    "season": "2024",
+    "match_label": "Venezuela vs Canada",
+    "kicks": 12,
+    "goals": 7
+  },
+  {
+    "match_id": 3942228,
+    "competition": "Copa America",
+    "season": "2024",
+    "match_label": "Argentina vs Ecuador",
+    "kicks": 9,
+    "goals": 6
+  },
+  {
+    "match_id": 7585,
+    "competition": "FIFA World Cup",
+    "season": "2018",
+    "match_label": "Colombia vs England",
+    "kicks": 10,
+    "goals": 7
+  },
+  {
+    "match_id": 7581,
+    "competition": "FIFA World Cup",
+    "season": "2018",
+    "match_label": "Croatia vs Denmark",
+    "kicks": 10,
+    "goals": 5
+  },
+  {
+    "match_id": 7582,
+    "competition": "FIFA World Cup",
+    "season": "2018",
+    "match_label": "Spain vs Russia",
+    "kicks": 9,
+    "goals": 7
+  },
+  {
+    "match_id": 8652,
+    "competition": "FIFA World Cup",
+    "season": "2018",
+    "match_label": "Russia vs Croatia",
+    "kicks": 10,
+    "goals": 7
+  },
+  {
+    "match_id": 3869321,
+    "competition": "FIFA World Cup",
+    "season": "2022",
+    "match_label": "Netherlands vs Argentina",
+    "kicks": 10,
+    "goals": 7
+  },
+  {
+    "match_id": 3869685,
+    "competition": "FIFA World Cup",
+    "season": "2022",
+    "match_label": "Argentina vs France",
+    "kicks": 8,
+    "goals": 6
+  },
+  {
+    "match_id": 3869420,
+    "competition": "FIFA World Cup",
+    "season": "2022",
+    "match_label": "Croatia vs Brazil",
+    "kicks": 8,
+    "goals": 6
+  },
+  {
+    "match_id": 3869220,
+    "competition": "FIFA World Cup",
+    "season": "2022",
+    "match_label": "Morocco vs Spain",
+    "kicks": 7,
+    "goals": 3
+  },
+  {
+    "match_id": 3869219,
+    "competition": "FIFA World Cup",
+    "season": "2022",
+    "match_label": "Japan vs Croatia",
+    "kicks": 8,
+    "goals": 4
+  },
+  {
+    "match_id": 3827767,
+    "competition": "Indian Super league",
+    "season": "2021/2022",
+    "match_label": "SC Delhi vs Kerala Blasters",
+    "kicks": 8,
+    "goals": 4
+  },
+  {
+    "match_id": 3795108,
+    "competition": "UEFA Euro",
+    "season": "2020",
+    "match_label": "Switzerland vs Spain",
+    "kicks": 9,
+    "goals": 4
+  },
+  {
+    "match_id": 3795220,
+    "competition": "UEFA Euro",
+    "season": "2020",
+    "match_label": "Italy vs Spain",
+    "kicks": 9,
+    "goals": 6
+  },
+  {
+    "match_id": 3795506,
+    "competition": "UEFA Euro",
+    "season": "2020",
+    "match_label": "Italy vs England",
+    "kicks": 10,
+    "goals": 5
+  },
+  {
+    "match_id": 3794691,
+    "competition": "UEFA Euro",
+    "season": "2020",
+    "match_label": "France vs Switzerland",
+    "kicks": 10,
+    "goals": 9
+  },
+  {
+    "match_id": 3942227,
+    "competition": "UEFA Euro",
+    "season": "2024",
+    "match_label": "England vs Switzerland",
+    "kicks": 9,
+    "goals": 8
+  },
+  {
+    "match_id": 3942349,
+    "competition": "UEFA Euro",
+    "season": "2024",
+    "match_label": "Portugal vs France",
+    "kicks": 9,
+    "goals": 8
+  },
+  {
+    "match_id": 3941020,
+    "competition": "UEFA Euro",
+    "season": "2024",
+    "match_label": "Portugal vs Slovenia",
+    "kicks": 6,
+    "goals": 3
+  },
+  {
+    "match_id": 4020846,
+    "competition": "UEFA Women's Euro",
+    "season": "2025",
+    "match_label": "England Women's vs Spain Women's",
+    "kicks": 9,
+    "goals": 4
+  },
+  {
+    "match_id": 4018357,
+    "competition": "UEFA Women's Euro",
+    "season": "2025",
+    "match_label": "France Women's vs Germany Women's",
+    "kicks": 14,
+    "goals": 11
+  },
+  {
+    "match_id": 4018355,
+    "competition": "UEFA Women's Euro",
+    "season": "2025",
+    "match_label": "Sweden Women's vs England Women's",
+    "kicks": 14,
+    "goals": 5
+  },
+  {
+    "match_id": 68357,
+    "competition": "Women's World Cup",
+    "season": "2019",
+    "match_label": "Norway Women's vs Australia Women's",
+    "kicks": 7,
+    "goals": 5
+  },
+  {
+    "match_id": 3902968,
+    "competition": "Women's World Cup",
+    "season": "2023",
+    "match_label": "Australia Women's vs France Women's",
+    "kicks": 20,
+    "goals": 13
+  },
+  {
+    "match_id": 3901797,
+    "competition": "Women's World Cup",
+    "season": "2023",
+    "match_label": "Sweden Women's vs United States Women's",
+    "kicks": 14,
+    "goals": 9
+  },
+  {
+    "match_id": 3901735,
+    "competition": "Women's World Cup",
+    "season": "2023",
+    "match_label": "England Women's vs Nigeria Women's",
+    "kicks": 9,
+    "goals": 6
+  }
+]

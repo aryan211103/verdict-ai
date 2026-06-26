@@ -1,0 +1,19 @@
+.feature-nav {
+  display: flex;
+  background: #060c1a;
+  border-bottom: 1px solid #1e293b;
+  padding: 0 1rem;
+}
+.feature-btn {
+  padding: 0.7rem 1.2rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.12s;
+}
+.feature-btn:hover { color: #cbd5e1; }
+.feature-btn.active { color: #e2e8f0; border-bottom-color: #3b82f6; }

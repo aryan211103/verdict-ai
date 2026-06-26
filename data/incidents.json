@@ -1,0 +1,79 @@
+[
+  {
+    "id": "suarez_handball_wc2010_qf",
+    "title": "Suárez handball on the goal line — WC 2010 quarter-final",
+    "competition": "FIFA World Cup 2010",
+    "match": "Uruguay vs Ghana",
+    "stage": "Quarter-final, extra time (120th minute)",
+    "what_happened": "With the score at 1–1 in the final seconds of extra time, Ghana's Dominic Adiyah headed the ball toward an unguarded goal. Uruguay's Luis Suárez, positioned on or near the goal line, stopped the ball with both hands. The referee awarded a penalty kick to Ghana and showed Suárez a red card. Asamoah Gyan struck the crossbar with the penalty. Uruguay won the subsequent penalty shoot-out 4–2.",
+    "call": "Red card for Suárez. Penalty kick awarded to Ghana.",
+    "call_type": "correct",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_it_is_an_offence_if_a_player_88acc8",
+      "law12_denying_a_goal_or_an_obvious_goal_scoring_opport_5c64ff",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "zidane_headbutt_wc2006_final",
+    "title": "Zidane headbutt — WC 2006 final",
+    "competition": "FIFA World Cup 2006",
+    "match": "France vs Italy",
+    "stage": "Final, extra time",
+    "what_happened": "In extra time, with the score at 1–1, Zinedine Zidane headbutted Marco Materazzi in the chest. The fourth official Luís Medina Cantalejo relayed the incident to referee Horacio Elizondo. Elizondo consulted his officials and showed Zidane a red card. Zidane walked past the World Cup trophy as he left the pitch. Italy won the subsequent penalty shoot-out 5–3.",
+    "call": "Red card for Zidane.",
+    "call_type": "correct",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_violent_conduct_7aaa60",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "henry_handball_wc2010_qualifier",
+    "title": "Henry handball in play-off — WC 2010 European qualifier",
+    "competition": "FIFA World Cup 2010 European play-off",
+    "match": "France vs Republic of Ireland (second leg)",
+    "stage": "Second leg, 103rd minute (first half of extra time, aggregate 1–1)",
+    "what_happened": "With the aggregate score at 1–1 in the 103rd minute, a ball was played into the Irish penalty area. Thierry Henry controlled the ball with his left arm near the six-yard box, the ball touching his arm twice. Henry then passed to William Gallas who scored. Referee Martin Hansson did not call a foul. The goal stood. France advanced to the 2010 World Cup on an aggregate score of 2–1.",
+    "call": "Goal given. No foul for handball awarded.",
+    "call_type": "error",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_handling_the_ball_d408de",
+      "law12_it_is_an_offence_if_a_player_88acc8"
+    ]
+  },
+  {
+    "id": "maradona_hand_of_god_wc1986_qf",
+    "title": "Maradona handball goal — WC 1986 quarter-final",
+    "competition": "FIFA World Cup 1986",
+    "match": "Argentina vs England",
+    "stage": "Quarter-final, 51st minute",
+    "what_happened": "In the 51st minute, Diego Maradona punched the ball into the goal inside the England penalty area with his left hand or fist. Referee Ali Bin Nasser awarded the goal. England players protested to the referee but the goal was not disallowed. Argentina won 2–1 and advanced to the semi-finals.",
+    "call": "Goal awarded.",
+    "call_type": "error",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_handling_the_ball_d408de",
+      "law12_it_is_an_offence_if_a_player_88acc8"
+    ]
+  },
+  {
+    "id": "tevez_offside_wc2010_r16",
+    "title": "Tevez offside goal — WC 2010 round of 16",
+    "competition": "FIFA World Cup 2010",
+    "match": "Argentina vs Mexico",
+    "stage": "Round of 16 vs Mexico, 26th minute",
+    "what_happened": "In the 26th minute, Carlos Tevez headed the ball into the goal from inside the Mexican penalty area. Television replays broadcast on the stadium's big screens showed Tevez was in an offside position at the moment the ball was played to him. The assistant referee did not flag for offside. The goal stood. Argentina won 3–1. The match was played before VAR was introduced at the World Cup.",
+    "call": "Goal awarded.",
+    "call_type": "error",
+    "is_flagged": false,
+    "law_tags": [
+      "law11_1_offside_position_bb2d1e",
+      "law11_2_offside_offence_5e58bc",
+      "law11_4_offences_and_sanctions_8d7c57"
+    ]
+  }
+]

@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "computed_at": "2026-06-25T22:30:52.627201+00:00",
+    "n_shootout_kicks": 328,
+    "n_excluded_club_shootout_kicks": 35,
+    "excluded_competitions": [
+      "Champions League",
+      "Indian Super league"
+    ],
+    "competitions": [
+      "African Cup of Nations",
+      "Copa America",
+      "FIFA World Cup",
+      "UEFA Euro",
+      "UEFA Women's Euro",
+      "Women's World Cup"
+    ],
+    "min_n_for_ci": 5,
+    "bucket_rule": "International national-team tournaments only. Club competitions (Champions League, Indian Super League, etc.) are excluded from pressure stats \u2014 they feed the per-player placement pool only.",
+    "warning": "Population-level historical base rates only. These do not predict individual kick outcomes and do not recommend any direction for either side."
+  },
+  "overall": {
+    "label": "all_shootout_kicks",
+    "n": 328,
+    "goals": 218,
+    "rate": 0.6646,
+    "wilson_lo": 0.6119,
+    "wilson_hi": 0.7136,
+    "ci_note": "95% Wilson CI, n=328"
+  },
+  "by_kick_order": [
+    {
+      "label": "1",
+      "n": 32,
+      "goals": 19,
+      "rate": 0.5938,
+      "wilson_lo": 0.4226,
+      "wilson_hi": 0.7448,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "2",
+      "n": 32,
+      "goals": 20,
+      "rate": 0.625,
+      "wilson_lo": 0.4525,
+      "wilson_hi": 0.7707,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "3",
+      "n": 32,
+      "goals": 23,
+      "rate": 0.7188,
+      "wilson_lo": 0.5463,
+      "wilson_hi": 0.8444,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "4",
+      "n": 32,
+      "goals": 21,
+      "rate": 0.6562,
+      "wilson_lo": 0.4831,
+      "wilson_hi": 0.7959,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "5",
+      "n": 32,
+      "goals": 21,
+      "rate": 0.6562,
+      "wilson_lo": 0.4831,
+      "wilson_hi": 0.7959,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "6",
+      "n": 32,
+      "goals": 20,
+      "rate": 0.625,
+      "wilson_lo": 0.4525,
+      "wilson_hi": 0.7707,
+      "ci_note": "95% Wilson CI, n=32"
+    },
+    {
+      "label": "7",
+      "n": 31,
+      "goals": 22,
+      "rate": 0.7097,
+      "wilson_lo": 0.5341,
+      "wilson_hi": 0.839,
+      "ci_note": "95% Wilson CI, n=31"
+    },
+    {
+      "label": "8",
+      "n": 29,
+      "goals": 20,
+      "rate": 0.6897,
+      "wilson_lo": 0.5077,
+      "wilson_hi": 0.8272,
+      "ci_note": "95% Wilson CI, n=29"
+    },
+    {
+      "label": "9",
+      "n": 26,
+      "goals": 18,
+      "rate": 0.6923,
+      "wilson_lo": 0.5001,
+      "wilson_hi": 0.835,
+      "ci_note": "95% Wilson CI, n=26"
+    },
+    {
+      "label": "10",
+      "n": 14,
+      "goals": 9,
+      "rate": 0.6429,
+      "wilson_lo": 0.3876,
+      "wilson_hi": 0.8366,
+      "ci_note": "95% Wilson CI, n=14"
+    },
+    {
+      "label": "SD",
+      "n": 36,
+      "goals": 25,
+      "rate": 0.6944,
+      "wilson_lo": 0.5314,
+      "wilson_hi": 0.82,
+      "ci_note": "95% Wilson CI, n=36"
+    }
+  ],
+  "by_score_state": [
+    {
+      "label": "ahead",
+      "n": 53,
+      "goals": 39,
+      "rate": 0.7358,
+      "wilson_lo": 0.6042,
+      "wilson_hi": 0.8356,
+      "ci_note": "95% Wilson CI, n=53"
+    },
+    {
+      "label": "level",
+      "n": 150,
+      "goals": 95,
+      "rate": 0.6333,
+      "wilson_lo": 0.5538,
+      "wilson_hi": 0.7062,
+      "ci_note": "95% Wilson CI, n=150"
+    },
+    {
+      "label": "behind",
+      "n": 125,
+      "goals": 84,
+      "rate": 0.672,
+      "wilson_lo": 0.5856,
+      "wilson_hi": 0.7481,
+      "ci_note": "95% Wilson CI, n=125"
+    }
+  ],
+  "sudden_death_vs_regular": [
+    {
+      "label": "regular_rounds",
+      "n": 292,
+      "goals": 193,
+      "rate": 0.661,
+      "wilson_lo": 0.6049,
+      "wilson_hi": 0.7129,
+      "ci_note": "95% Wilson CI, n=292"
+    },
+    {
+      "label": "sudden_death",
+      "n": 36,
+      "goals": 25,
+      "rate": 0.6944,
+      "wilson_lo": 0.5314,
+      "wilson_hi": 0.82,
+      "ci_note": "95% Wilson CI, n=36"
+    }
+  ],
+  "pairwise_overlap": {
+    "ahead_vs_level": {
+      "overlaps": true,
+      "interpretation": "no statistically detectable difference (CIs overlap)"
+    },
+    "ahead_vs_behind": {
+      "overlaps": true,
+      "interpretation": "no statistically detectable difference (CIs overlap)"
+    },
+    "level_vs_behind": {
+      "overlaps": true,
+      "interpretation": "no statistically detectable difference (CIs overlap)"
+    },
+    "sd_vs_regular": {
+      "overlaps": true,
+      "interpretation": "no statistically detectable difference (CIs overlap)"
+    }
+  },
+  "_sd_threshold": 10
+}

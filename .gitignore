@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Data — raw extractions (large, regenerable)
+data/.cache/
+
+# IFAB PDF — copyrighted, do not commit.
+# Parsed output (law_chunks.json) IS committed.
+data/ifab/*.pdf
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store

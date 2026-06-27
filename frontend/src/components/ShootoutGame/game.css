@@ -40,6 +40,50 @@
   justify-content: flex-start;
 }
 
+/* ── Stadium atmosphere background (kick phase only) ─────────────────
+   Decorative CSS background sits BEHIND everything — GoalScene SVG
+   and its zones are completely untouched by these rules.
+   ────────────────────────────────────────────────────────────────────── */
+.game-root:has(.goal-grid-wrap) {
+  background-color: #020709;
+  background-image:
+    /* Left floodlight: warm radial from upper-left corner */
+    radial-gradient(ellipse 60% 50% at 2% 0%,
+      rgba(255, 238, 130, 0.30) 0%,
+      rgba(255, 220, 70,  0.10) 35%,
+      transparent 65%),
+    /* Right floodlight: symmetric */
+    radial-gradient(ellipse 60% 50% at 98% 0%,
+      rgba(255, 238, 130, 0.30) 0%,
+      rgba(255, 220, 70,  0.10) 35%,
+      transparent 65%),
+    /* Stand silhouette left — dark column */
+    linear-gradient(to right,
+      rgba(3, 8, 4, 0.72) 0%,
+      rgba(3, 8, 4, 0.10) 22%,
+      transparent 35%),
+    /* Stand silhouette right */
+    linear-gradient(to left,
+      rgba(3, 8, 4, 0.72) 0%,
+      rgba(3, 8, 4, 0.10) 22%,
+      transparent 35%),
+    /* Pitch-green ground glow at the bottom — reflected turf light */
+    radial-gradient(ellipse 100% 55% at 50% 100%,
+      rgba(30, 100, 40, 0.45) 0%,
+      rgba(18, 65,  28, 0.18) 45%,
+      transparent 68%);
+}
+
+/* Scoreboard: slight dark glass tint so it reads over the lit background */
+.game-root:has(.goal-grid-wrap) .scoreboard {
+  background: rgba(2, 7, 4, 0.78);
+}
+
+/* Role label: text-shadow so it stays legible over the floodlight glow */
+.game-root:has(.goal-grid-wrap) .role-label {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
 /* ── Error banner ────────────────────────────────────────────────────── */
 .error-banner {
   width: 100%;

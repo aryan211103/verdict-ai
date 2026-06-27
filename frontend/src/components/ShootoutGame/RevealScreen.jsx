@@ -10,6 +10,8 @@ const DIVE_LABELS = { L:'Left', C:'Centre', R:'Right' };
 export default function RevealScreen({ outcome, session, teamColors = {}, onNext, aiPanel = null }) {
   const goal    = outcome.goal;
   const matched = outcome.matched;
+  // Keeper guessed wrong AND ball still didn't go in → shooter missed, not a save.
+  const isMiss  = !goal && !matched;
 
   // Trigger entrance animation on mount
   const [visible, setVisible] = useState(false);
@@ -35,8 +37,8 @@ export default function RevealScreen({ outcome, session, teamColors = {}, onNext
     <div className={resultClass}>
       {/* Animated result badge */}
       <div className={`result-badge ${goal ? 'badge-goal-anim' : 'badge-save-anim'}`}>
-        {goal ? '⚽' : '🧤'}
-        <span className="result-word">{goal ? ' GOAL!' : ' SAVED!'}</span>
+        {goal ? '⚽' : isMiss ? '❌' : '🧤'}
+        <span className="result-word">{goal ? ' GOAL!' : isMiss ? ' MISSED' : ' SAVED!'}</span>
       </div>
 
       <div className="reveal-detail">
@@ -44,8 +46,10 @@ export default function RevealScreen({ outcome, session, teamColors = {}, onNext
         <div className="reveal-row">🧤 {keeperLine}</div>
         <div className="reveal-row dim">{matchLine}</div>
         <div className="reveal-row dim">
-          P(goal) was {(outcome.p_goal * 100).toFixed(0)}%
-          &nbsp;— resolved by a single random draw
+          {isMiss
+            ? `${(outcome.p_goal * 100).toFixed(0)}% goal chance — but the ${(100 - outcome.p_goal * 100).toFixed(0)}% came up. No goal.`
+            : `P(goal) was ${(outcome.p_goal * 100).toFixed(0)}% — resolved by a single random draw`
+          }
         </div>
       </div>
 

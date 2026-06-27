@@ -1,22 +1,36 @@
 import { useState } from 'react';
 
-const CALL_TYPE_LABEL = {
-  correct: { label: 'Correct call', cls: 'tag-correct' },
-  error:   { label: 'Missed call / Referee error', cls: 'tag-error' },
-};
+/* ── Derive a compact summary from existing cached fields ────────────────
+ * No new claims. All fields come from the verified incident record.
+ */
+
+function firstSentence(text) {
+  // Return the first sentence (up to first . or !)
+  const m = text.match(/^[^.!?]+[.!?]/);
+  return m ? m[0].trim() : text.substring(0, 140).trim() + '…';
+}
+
+function extractLawCitations(lawContext) {
+  // Parse "--- Law 12 | Serious foul play [page 124, ..." headers
+  const re = /Law (\d+)\s*\|\s*([^[]+?)\s*\[/g;
+  const names = new Set();
+  let m;
+  while ((m = re.exec(lawContext)) !== null) {
+    names.add(`Law ${m[1]} — ${m[2].trim()}`);
+  }
+  return [...names];
+}
 
 function renderExplanation(text) {
-  // Preserve paragraph breaks; bold **text**
   return text.split('\n\n').map((para, i) => {
-    const html = para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    return (
-      <p key={i} dangerouslySetInnerHTML={{ __html: html }} />
-    );
+    const html = para
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^>\s*/gm, '');   // strip blockquote markers
+    return <p key={i} dangerouslySetInnerHTML={{ __html: html }}/>;
   });
 }
 
 function renderLawText(text) {
-  // Law section headers (--- ... ---) get distinct styling
   return text.split('\n\n').map((block, i) => {
     if (block.startsWith('---')) {
       const header = block.split('\n')[0].replace(/---/g, '').trim();
@@ -32,44 +46,75 @@ function renderLawText(text) {
   });
 }
 
-export default function IncidentPanel({ incident }) {
-  const [showLaw, setShowLaw] = useState(false);
+const CALL_TYPE_LABEL = {
+  correct: { label: 'Correct call', cls: 'tag-correct' },
+  error:   { label: 'Missed call / Referee error', cls: 'tag-error' },
+};
 
-  const { label, cls } = CALL_TYPE_LABEL[incident.call_type] ?? { label: '', cls: '' };
+export default function IncidentPanel({ incident }) {
+  const [showFull, setShowFull] = useState(false);
+  const [showLaw,  setShowLaw]  = useState(false);
+
+  const { label, cls } = CALL_TYPE_LABEL[incident.call_type] ?? {};
+  const lawCitations   = extractLawCitations(incident.law_context_used);
+  const offenceSummary = firstSentence(incident.what_happened);
 
   return (
     <article className="incident-panel">
-      {/* ── Header ─────────────────────────────────────────────────── */}
+
+      {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="panel-header">
         <h2 className="panel-title">{incident.title}</h2>
         <span className={`call-tag ${cls}`}>{label}</span>
       </div>
-
-      <div className="panel-meta">
-        <span>{incident.competition}</span>
+      <p className="panel-meta">
+        {incident.competition}
         <span className="meta-sep">·</span>
-        <span>{incident.match}</span>
-      </div>
+        {incident.match}
+      </p>
 
-      {/* ── What happened ──────────────────────────────────────────── */}
-      <section className="panel-section">
-        <h3 className="section-heading">What happened</h3>
-        <p className="what-happened">{incident.what_happened}</p>
-        <div className="call-box">
-          <span className="call-label">Call: </span>
-          <span className="call-text">{incident.call}</span>
-        </div>
+      {/* ── Quick-read summary (derived from verified fields) ───────────── */}
+      <section className="summary-card">
+        <dl className="summary-dl">
+          <div className="summary-row">
+            <dt className="summary-key">Offence</dt>
+            <dd className="summary-val">{offenceSummary}</dd>
+          </div>
+          <div className="summary-row">
+            <dt className="summary-key">Decision</dt>
+            <dd className="summary-val decision-val">{incident.call}</dd>
+          </div>
+          <div className="summary-row">
+            <dt className="summary-key">Law cited</dt>
+            <dd className="summary-val">
+              {lawCitations.length > 0
+                ? lawCitations.join(' · ')
+                : 'See explanation below'}
+            </dd>
+          </div>
+        </dl>
       </section>
 
-      {/* ── Explanation ────────────────────────────────────────────── */}
+      {/* ── Full explanation (expandable) ────────────────────────────────── */}
       <section className="panel-section">
-        <h3 className="section-heading">Explanation</h3>
-        <div className="explanation-body">
-          {renderExplanation(incident.explanation)}
-        </div>
+        <button
+          className="expand-toggle"
+          onClick={() => setShowFull(v => !v)}
+        >
+          {showFull ? 'Hide full explanation ▲' : 'Read full explanation ▼'}
+        </button>
+
+        {showFull && (
+          <div className="explanation-body">
+            {renderExplanation(incident.explanation)}
+          </div>
+        )}
+      </section>
+
+      {/* ── Law text (expandable) ────────────────────────────────────────── */}
+      <section className="panel-section">
         <div className="provenance">
-          Grounded in IFAB Laws of the Game ·
-          Model: {incident.model_id} ·{' '}
+          Grounded in IFAB Laws of the Game · Model: {incident.model_id} ·{' '}
           <button
             className="law-toggle"
             onClick={() => setShowLaw(v => !v)}
@@ -77,22 +122,20 @@ export default function IncidentPanel({ incident }) {
             {showLaw ? 'Hide law text ▲' : 'Show injected law text ▼'}
           </button>
         </div>
+
+        {showLaw && (
+          <div className="law-panel">
+            <h3 className="section-heading">
+              IFAB Laws injected into the prompt
+              <span className="law-note">(the only source Verdict AI is permitted to cite)</span>
+            </h3>
+            <div className="law-text-body">
+              {renderLawText(incident.law_context_used)}
+            </div>
+          </div>
+        )}
       </section>
 
-      {/* ── Law text (toggleable) ───────────────────────────────────── */}
-      {showLaw && (
-        <section className="panel-section law-panel">
-          <h3 className="section-heading">
-            IFAB Laws injected into the prompt
-            <span className="law-note">
-              (the only source Verdict AI is permitted to cite)
-            </span>
-          </h3>
-          <div className="law-text-body">
-            {renderLawText(incident.law_context_used)}
-          </div>
-        </section>
-      )}
     </article>
   );
 }

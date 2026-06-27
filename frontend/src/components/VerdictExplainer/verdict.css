@@ -14,19 +14,16 @@
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
-
 .verdict-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: var(--fw-black);
   letter-spacing: var(--ls-display);
   text-transform: uppercase;
-  color: var(--line-white);        /* was missing — caused invisible title */
+  color: var(--line-white);
   margin: 0;
 }
-
 .verdict-sub {
-  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-upper);
@@ -38,20 +35,19 @@
 /* ── Two-column body ─────────────────────────────────────────────────────── */
 .verdict-body {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 280px 1fr;
   flex: 1;
   min-height: 0;
   overflow: hidden;
 }
 
-/* ── Incident nav ────────────────────────────────────────────────────────── */
+/* ── Incident nav ─────────────────────────────────────────────────────────── */
 .incident-nav {
   border-right: 1px solid var(--border);
   padding: var(--sp-4) 0;
   overflow-y: auto;
   background: var(--surface);
 }
-
 .nav-heading {
   font-family: var(--font-display);
   font-size: var(--text-2xs);
@@ -60,12 +56,9 @@
   text-transform: uppercase;
   color: var(--text-dim);
   padding: 0 var(--sp-4) var(--sp-3);
-  margin: 0;
   display: block;
 }
-
 .incident-list { list-style: none; margin: 0; padding: 0; }
-
 .incident-btn {
   width: 100%;
   padding: var(--sp-3) var(--sp-4);
@@ -81,58 +74,51 @@
   transition: background 0.12s, border-color 0.12s, color 0.12s;
 }
 .incident-btn:hover {
-  background: var(--surface-card);
+  background: rgba(255,255,255,0.03);
   color: var(--text);
-  border-left-color: var(--border-subtle);
 }
+/* GREEN accent is ONLY the left border on the selected incident */
 .incident-btn.active {
-  background: var(--color-green-900);
+  background: rgba(255,255,255,0.04);
   color: var(--line-white);
-  border-left-color: var(--pitch-green);
+  border-left-color: var(--pitch-green);   /* the ONE green accent here */
 }
 .incident-name { font-size: var(--text-sm); font-weight: var(--fw-semibold); line-height: 1.35; }
 
-/* ── Call badges ─────────────────────────────────────────────────────────── */
-.call-badge    { font-size: var(--text-2xs); font-weight: var(--fw-semibold); padding: 2px 7px; border-radius: 999px; }
-.badge-correct { background: #052e16; color: #4ade80; }
-.badge-error   { background: #450a0a; color: #f87171; }
+/* ── Call badges — the other two permitted uses of colour ────────────────── */
+.call-badge    { font-size: var(--text-2xs); font-weight: var(--fw-semibold); padding: 2px 7px; border-radius: 3px; }
+.badge-correct { background: rgba(22,163,74,0.15); color: #4ade80; }
+.badge-error   { background: rgba(220,38,38,0.12); color: #f87171; }
 
-/* ── Placeholder — centred, not left-stranded ────────────────────────────── */
+/* ── Placeholder ─────────────────────────────────────────────────────────── */
 .verdict-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
   padding: var(--sp-10) var(--sp-8);
   color: var(--text-dim);
   font-size: var(--text-sm);
-  font-family: var(--font-display);
-  letter-spacing: var(--ls-display);
+  letter-spacing: var(--ls-upper);
   text-transform: uppercase;
   text-align: center;
 }
-.verdict-placeholder::before {
-  content: '⚖️';
-  font-size: 2.5rem;
-  display: block;
-}
+.verdict-placeholder::before { content: '⚖️'; font-size: 2rem; display: block; }
 
-/* ── Incident panel ──────────────────────────────────────────────────────── */
+/* ── Incident panel ───────────────────────────────────────────────────────── */
 .incident-panel {
   padding: var(--sp-8) var(--sp-10);
   overflow-y: auto;
   max-width: 820px;
   background: var(--bg);
 }
-
 .panel-header {
   display: flex;
   align-items: flex-start;
   gap: var(--sp-4);
   margin-bottom: var(--sp-2);
 }
-
 .panel-title {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
@@ -143,53 +129,44 @@
   margin: 0;
   flex: 1;
 }
+.call-tag    { font-size: var(--text-2xs); font-weight: var(--fw-semibold); padding: 3px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 6px; }
+.tag-correct { background: rgba(22,163,74,0.15); color: #4ade80; }
+.tag-error   { background: rgba(220,38,38,0.12); color: #f87171; }
 
-.call-tag       { font-size: var(--text-2xs); font-weight: var(--fw-semibold); padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; margin-top: 6px; }
-.tag-correct    { background: #052e16; color: #4ade80; }
-.tag-error      { background: #450a0a; color: #f87171; }
+.panel-meta { color: var(--text-muted); font-size: var(--text-xs); margin-bottom: var(--sp-6); }
+.meta-sep   { margin: 0 var(--sp-2); }
 
-.panel-meta {
-  color: var(--text-muted);
-  font-size: var(--text-xs);
-  margin-bottom: var(--sp-6);
-}
-.meta-sep { margin: 0 var(--sp-2); }
-
-/* ── Sections ────────────────────────────────────────────────────────────── */
-.panel-section  { margin-bottom: var(--sp-6); }
-
+/* ── Sections ─────────────────────────────────────────────────────────────── */
+.panel-section { margin-bottom: var(--sp-6); }
 .section-heading {
   font-family: var(--font-display);
   font-size: var(--text-2xs);
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-upper);
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text-muted);   /* readable but not dominant */
   margin: 0 0 var(--sp-3);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
 }
 
+/* ── What happened / call box ────────────────────────────────────────────── */
 .what-happened {
-  color: var(--text);
-  line-height: 1.7;
+  color: var(--text);          /* near-white, maximum readability */
+  line-height: 1.75;
   margin: 0 0 var(--sp-3);
   font-size: var(--text-base);
 }
-
 .call-box {
   background: var(--surface-card);
   border-radius: var(--radius);
-  border-left: 3px solid var(--pitch-green);
+  border-left: 2px solid var(--border);   /* neutral — not green */
   padding: var(--sp-3) var(--sp-4);
   font-size: var(--text-sm);
 }
 .call-label { color: var(--text-muted); font-weight: var(--fw-semibold); margin-right: var(--sp-1); }
 .call-text  { color: var(--text); }
 
-/* ── Explanation ─────────────────────────────────────────────────────────── */
-.explanation-body { color: var(--text); line-height: 1.75; font-size: var(--text-base); }
+/* ── Explanation (reading-heavy — calm and light) ────────────────────────── */
+.explanation-body { color: var(--text); line-height: 1.8; font-size: var(--text-base); }
 .explanation-body p { margin: 0 0 var(--sp-4); }
 .explanation-body p:last-child { margin-bottom: 0; }
 
@@ -199,10 +176,10 @@
   margin-top: var(--sp-4);
   display: flex;
   align-items: center;
-  gap: var(--sp-1);
+  gap: var(--sp-2);
   flex-wrap: wrap;
 }
-
+/* GREEN only on the toggle link — the third permitted use */
 .law-toggle {
   background: none;
   border: none;
@@ -211,20 +188,19 @@
   font-size: var(--text-xs);
   font-family: var(--font-body);
   padding: 0;
-  text-decoration: underline;
   text-underline-offset: 2px;
+  text-decoration: underline;
 }
 .law-toggle:hover { color: var(--accent-hover); }
 
-/* ── Law text panel ──────────────────────────────────────────────────────── */
+/* ── Law text (reading-heavy — must be legible) ───────────────────────────── */
 .law-panel {
   background: var(--surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--sp-4) var(--sp-5);
   margin-top: var(--sp-2);
 }
-
 .law-note {
   font-size: var(--text-2xs);
   color: var(--text-dim);
@@ -233,35 +209,29 @@
   letter-spacing: 0;
   margin-left: var(--sp-2);
 }
-
 .law-text-body { display: flex; flex-direction: column; gap: var(--sp-4); }
-
-.law-section { border-left: 2px solid var(--border-subtle); padding-left: var(--sp-4); }
-
+.law-section { border-left: 2px solid var(--border); padding-left: var(--sp-4); }
 .law-section-header {
   font-family: var(--font-display);
   font-size: var(--text-xs);
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-display);
   text-transform: uppercase;
-  color: var(--pitch-green);
+  color: var(--text-muted);   /* muted — not green; labels not accents */
   margin-bottom: var(--sp-2);
 }
-
 .law-section-body {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  font-size: var(--text-sm);
+  color: var(--text);          /* light text, maximum readability */
   font-family: var(--font-body);
   white-space: pre-wrap;
   word-break: break-word;
-  margin: 0;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
+/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 760px) {
-  .verdict-body        { grid-template-columns: 1fr; }
-  .incident-nav        { border-right: none; border-bottom: 1px solid var(--border); max-height: 40vh; }
-  .incident-panel      { padding: var(--sp-5) var(--sp-4); }
-  .verdict-placeholder { padding: var(--sp-6) var(--sp-4); }
+  .verdict-body   { grid-template-columns: 1fr; }
+  .incident-nav   { border-right: none; border-bottom: 1px solid var(--border); max-height: 40vh; }
+  .incident-panel { padding: var(--sp-5) var(--sp-4); }
 }

@@ -75,5 +75,82 @@
       "law11_2_offside_offence_5e58bc",
       "law11_4_offences_and_sanctions_8d7c57"
     ]
+  },
+  {
+    "id": "keane_haaland_seriousfoulplay_2001",
+    "title": "Keane serious foul play on Haaland — PL 2001",
+    "competition": "English Premier League",
+    "match": "Manchester United vs Manchester City",
+    "stage": "21 April 2001",
+    "what_happened": "Roy Keane tackled Alf-Inge Haaland with a late, forceful challenge to Haaland's knee. The referee showed Keane a red card. Haaland did not play professional football again due to the knee injuries sustained.",
+    "call": "Red card for Keane.",
+    "call_type": "correct",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_serious_foul_play_553452",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "suarez_biting_chiellini_wc2014",
+    "title": "Suárez bites Chiellini — WC 2014 group stage",
+    "competition": "FIFA World Cup 2014",
+    "match": "Uruguay vs Italy",
+    "stage": "Group stage, 24 June 2014",
+    "what_happened": "During the group-stage match, Luis Suárez bit Italian defender Giorgio Chiellini on the left shoulder. Chiellini pulled down his shirt to show the referee the bite mark. The referee took no action during the match. Uruguay won 1–0 and advanced from the group. FIFA retrospectively issued Suárez a nine-match international suspension and a four-month ban from all football-related activities.",
+    "call": "No action taken by the referee during the match.",
+    "call_type": "error",
+    "error_type": "disciplinary",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_violent_conduct_7aaa60",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "dejong_xabialonso_wc2010_final",
+    "title": "De Jong on Xabi Alonso — WC 2010 final",
+    "competition": "FIFA World Cup 2010",
+    "match": "Netherlands vs Spain",
+    "stage": "Final, 11 July 2010, 28th minute",
+    "what_happened": "Nigel de Jong jumped and planted the studs of his raised boot into Xabi Alonso's chest, striking him chest-high. The referee showed de Jong a yellow card. Spain won the match 1–0 after extra time.",
+    "call": "Yellow card for de Jong.",
+    "call_type": "error",
+    "error_type": "disciplinary",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_serious_foul_play_553452",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "rooney_stamp_wc2006_qf",
+    "title": "Rooney stamp — WC 2006 quarter-final",
+    "competition": "FIFA World Cup 2006",
+    "match": "England vs Portugal",
+    "stage": "Quarter-final, 62nd minute",
+    "what_happened": "Wayne Rooney stood on Ricardo Carvalho's groin with his foot during a challenge. The referee showed Rooney a straight red card. England played the rest of the match with ten men and lost on penalties.",
+    "call": "Red card for Rooney.",
+    "call_type": "correct",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_violent_conduct_7aaa60",
+      "law12_sending_off_offences_af9a41"
+    ]
+  },
+  {
+    "id": "dicancio_push_referee_pl1998",
+    "title": "Di Canio pushes referee Alcock — PL 1998",
+    "competition": "English Premier League",
+    "match": "Sheffield Wednesday vs Arsenal",
+    "stage": "26 September 1998",
+    "what_happened": "After being shown a red card, Paolo Di Canio pushed referee Paul Alcock, causing Alcock to fall to the ground. The referee showed Di Canio a red card for the push.",
+    "call": "Red card for Di Canio for pushing the referee.",
+    "call_type": "correct",
+    "is_flagged": false,
+    "law_tags": [
+      "law12_violent_conduct_7aaa60",
+      "law12_sending_off_91fcc1"
+    ]
   }
 ]

@@ -35,13 +35,21 @@ _BASE_WAIT   = 12   # seconds; each retry doubles: 12, 24, 48, 96
 
 # ── Prompts (branched by call_type) ──────────────────────────────────────────
 #
-# "correct": the officials applied the Laws accurately — explain why each part
-#            of the call was required by the provided law text.
+# call_type / error_type branching:
 #
-# "error":   the officials missed or misapplied the Laws — explain what the
-#            Laws actually say, state that the outcome should have been
-#            different, and make clear it stood ONLY because it was not seen
-#            or penalised. Do NOT invent any legal justification for the result.
+# "correct"  — officials applied the Laws accurately.
+#
+# "error" with error_type "goal_affecting"  — the error wrongly allowed or
+#              disallowed a goal. Explain what the Laws say, state the goal
+#              should/should not have stood, and that it stood only because
+#              officials missed it.
+#
+# "error" with error_type "disciplinary"    — the error was a missed or
+#              insufficient card/sanction (e.g. yellow when red was required,
+#              or nothing when a red was required). Explain the correct sanction
+#              under the Laws. Do NOT claim any goal was disallowed or match
+#              result affected unless the offence directly caused or prevented
+#              a goal. The focus is on what card should have been shown and why.
 
 _SYSTEM_BASE = """\
 You are a football referee decision explainer. Your ONLY source of law is the \
@@ -63,18 +71,31 @@ _SYSTEM_CORRECT = (
     "call in turn."
 )
 
-_SYSTEM_ERROR = (
+_SYSTEM_ERROR_GOAL = (
     _SYSTEM_BASE + "\n\n"
-    "5. IMPORTANT: The call described was a referee ERROR. The outcome only "
-    "stood because the officials did not see or penalise the offence — NOT "
-    "because the Laws permitted it. You must:\n"
+    "5. IMPORTANT: The call described was a referee ERROR that wrongly allowed "
+    "or disallowed a goal. You must:\n"
     "   a. Quote the specific clauses that apply to what physically happened.\n"
     "   b. State clearly that under those clauses this constituted an offence "
-    "and the goal should have been disallowed (or the correct sanction applied).\n"
-    "   c. State that the goal stood only because the offence was not seen by "
-    "the officials.\n"
-    "   d. Do NOT invent any legal justification for the goal standing. "
-    "There is none in the Laws."
+    "and the goal should have been disallowed (or vice versa).\n"
+    "   c. State that the goal stood only because the offence was not seen "
+    "or penalised by the officials.\n"
+    "   d. Do NOT invent any legal justification for the incorrect outcome."
+)
+
+_SYSTEM_ERROR_DISCIPLINARY = (
+    _SYSTEM_BASE + "\n\n"
+    "5. IMPORTANT: The call described was a referee ERROR — either a missed card "
+    "or an insufficient sanction (e.g. a yellow shown when the Laws required a "
+    "red, or no action taken when a sending-off was required). You must:\n"
+    "   a. Quote the specific clauses that apply to what physically happened.\n"
+    "   b. State clearly what the correct sanction should have been under the "
+    "Laws and that it was not applied.\n"
+    "   c. State that the incorrect outcome was due to the officials not "
+    "recognising or applying the correct sanction.\n"
+    "   d. Do NOT claim that any goal was disallowed or that the match result "
+    "was affected UNLESS the offence directly caused or prevented a goal — "
+    "an off-ball sending-off offence does not disallow goals already scored."
 )
 
 _USER = """\
@@ -93,11 +114,19 @@ _TASK_CORRECT = (
     "required or permitted every part of this call."
 )
 
-_TASK_ERROR = (
+_TASK_ERROR_GOAL = (
     "Using the law text above and quoting key clauses, explain what the Laws "
     "actually say applies to this incident, state that the goal should have "
     "been disallowed under those Laws, and explain that it stood only because "
     "the officials did not see or penalise the offence."
+)
+
+_TASK_ERROR_DISCIPLINARY = (
+    "Using the law text above and quoting key clauses, explain what the correct "
+    "sanction should have been under the Laws (stating which specific clause "
+    "requires it), and state that the correct sanction was not applied. "
+    "Do NOT assert that any goal was disallowed or that the match result was "
+    "affected unless the offence directly caused or prevented a goal."
 )
 
 
@@ -168,9 +197,18 @@ def explain_incident(incident: dict, law_context: str) -> dict:
             "refused":          True,
         }
 
-    call_type = incident.get("call_type", "correct")
-    system    = _SYSTEM_ERROR   if call_type == "error" else _SYSTEM_CORRECT
-    task      = _TASK_ERROR     if call_type == "error" else _TASK_CORRECT
+    call_type  = incident.get("call_type",  "correct")
+    error_type = incident.get("error_type", "goal_affecting")   # default = old behaviour
+
+    if call_type != "error":
+        system = _SYSTEM_CORRECT
+        task   = _TASK_CORRECT
+    elif error_type == "disciplinary":
+        system = _SYSTEM_ERROR_DISCIPLINARY
+        task   = _TASK_ERROR_DISCIPLINARY
+    else:
+        system = _SYSTEM_ERROR_GOAL
+        task   = _TASK_ERROR_GOAL
 
     user_msg = _USER.format(
         law_context  = law_context,

@@ -161,8 +161,8 @@ export default function ShootoutGame() {
         <HandoffScreen
           message="Pass the device to"
           name={keeperTeam}
-          subtext="Shooter has locked in. Now choose your dive."
-          buttonLabel="I'm ready — show dive options"
+          subtext="Shooter has locked in. Cover a third of the goal."
+          buttonLabel="I'm ready — show the goal"
           onContinue={() => setUiPhase(PHASE.KEEPING)}
         />
       )}
@@ -170,7 +170,7 @@ export default function ShootoutGame() {
       {uiPhase === PHASE.KEEPING && (
         <div className="kick-screen">
           <Scoreboard session={session} teamColors={teamColors} />
-          <p className="role-label">🧤 Keeper — choose your dive</p>
+          <p className="role-label">🧤 Keeper — cover a third of the goal</p>
           <KeeperPicker onSelect={handleDiveChosen} loading={loading} />
         </div>
       )}

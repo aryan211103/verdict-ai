@@ -1,22 +1,19 @@
-const DIVES = [
-  { value: 'L', label: '← Dive Left',  emoji: '🧤' },
-  { value: 'C', label: '⬆ Stay Centre', emoji: '🧤' },
-  { value: 'R', label: 'Dive Right →',  emoji: '🧤' },
-];
+import GoalScene from './GoalScene';
+
+const DIVE_LABELS = { L: '← Dive Left', C: '⬆ Stay Centre', R: 'Dive Right →' };
 
 export default function KeeperPicker({ onSelect, loading }) {
   return (
-    <div className="keeper-picker">
-      {DIVES.map(d => (
-        <button
-          key={d.value}
-          className="dive-btn"
-          onClick={() => onSelect(d.value)}
-          disabled={loading}
-        >
-          {d.emoji} {d.label}
-        </button>
-      ))}
+    <div className="goal-grid-wrap">
+      <div className="goal-scene-card">
+        <GoalScene
+          mode="dive"
+          selected={null}
+          onZoneClick={onSelect}   // direct — no confirmation step for keeper
+          loading={loading}
+        />
+      </div>
+      <p className="dive-hint">Tap a third of the goal to cover it — same orientation as the shooter sees</p>
     </div>
   );
 }

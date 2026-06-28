@@ -12,16 +12,23 @@ import { api, ApiError } from '../../api/client';
 import './game.css';
 
 const PHASE = {
-  SETUP:         'setup',
-  HANDOFF_SHOOT: 'handoff_shoot',
-  SHOOTING:      'shooting',
-  HANDOFF_KEEP:  'handoff_keep',   // 1v1 only
-  KEEPING:       'keeping',        // 1v1 only
-  REVEAL:        'reveal',
-  WINNER:        'winner',
-  EXPIRED:       'expired',        // session evicted or backend returned 404
-  HARD_ERROR:    'hard_error',     // backend down or unrecoverable
+  SETUP:           'setup',
+  HANDOFF_SHOOT:   'handoff_shoot',
+  SHOOTING:        'shooting',
+  HANDOFF_KEEP:    'handoff_keep',     // 1v1 only
+  KEEPING:         'keeping',          // 1v1 only
+  HANDOFF_AI_KICK: 'handoff_ai_kick',  // vs_ai: AI shoots, human about to keep
+  AI_KEEPING:      'ai_keeping',       // vs_ai: human keeps for AI's shot
+  REVEAL:          'reveal',
+  WINNER:          'winner',
+  EXPIRED:         'expired',          // session evicted or backend returned 404
+  HARD_ERROR:      'hard_error',       // backend down or unrecoverable
 };
+
+const CELLS = ['TL','TC','TR','ML','MC','MR','BL','BC','BR'];
+function pickRandomCell() {
+  return CELLS[Math.floor(Math.random() * CELLS.length)];
+}
 
 export default function ShootoutGame() {
   const [uiPhase,     setUiPhase]    = useState(PHASE.SETUP);
@@ -34,11 +41,13 @@ export default function ShootoutGame() {
   const [aiCounts,    setAiCounts]   = useState(null);
   const [error,       setError]      = useState(null);
   const [loading,     setLoading]    = useState(false);
-  const [kickCount,   setKickCount]  = useState(0);     // kicks revealed; 0 = no confirm needed
+  const [kickCount,    setKickCount]   = useState(0);    // kicks revealed; 0 = no confirm needed
   const [confirmLeave, setConfirmLeave] = useState(false);
+  const [humanTeam,    setHumanTeam]   = useState(null); // vs_ai: name of the human-controlled team
+  const [aiPendingCell, setAiCell]     = useState(null); // vs_ai: AI's randomly chosen shot zone
 
   // ── Setup ─────────────────────────────────────────────────────────────────
-  async function handleSetupDone(teamA, teamB, chosenMode, colorA, colorB) {
+  async function handleSetupDone(teamA, teamB, chosenMode, colorA, colorB, humanTeamName) {
     setLoading(true); setError(null); setMode(chosenMode);
     // Store team colors for cosmetic accents — never enters game logic
     if (colorA || colorB) {
@@ -47,13 +56,25 @@ export default function ShootoutGame() {
         [teamB.team_name]: colorB,
       });
     }
+    // vs_ai: record which team the human controls; default to teamA if not specified
+    const pickedHumanTeam = chosenMode === 'vs_ai'
+      ? (humanTeamName || teamA.team_name)
+      : null;
+    setHumanTeam(pickedHumanTeam);
     try {
       const data  = await api.createSession({ team_a: teamA, team_b: teamB, mode: chosenMode });
       const state = await api.getSession(data.session_id);
       setSessionId(data.session_id);
       setSession(state.session);
       setAiCounts(state.ai_session_counts);
-      setUiPhase(PHASE.HANDOFF_SHOOT);
+      // In vs_ai, teamA always kicks first — if AI is teamA, begin with AI kick phase
+      if (chosenMode === 'vs_ai' && state.session.current_team !== pickedHumanTeam) {
+        const aiCell = pickRandomCell();
+        setAiCell(aiCell);
+        setUiPhase(PHASE.HANDOFF_AI_KICK);
+      } else {
+        setUiPhase(PHASE.HANDOFF_SHOOT);
+      }
     } catch (e) {
       if (e instanceof ApiError && e.status === 0) {
         setUiPhase(PHASE.HARD_ERROR);
@@ -82,7 +103,10 @@ export default function ShootoutGame() {
   async function submitKick(cell, dive) {
     setLoading(true); setError(null);
     try {
-      const payload = mode === 'vs_ai' ? { cell } : { cell, dive };
+      // vs_ai + dive===null → human shooting (AI keeper picks dive server-side)
+      // vs_ai + dive provided → AI shooting (human keeper; send both so backend can resolve)
+      // 1v1 → always send both
+      const payload = (mode === 'vs_ai' && dive === null) ? { cell } : { cell, dive };
       const data    = await api.submitKick(sessionId, payload);
       setOutcome(data.outcome);
       setSession(data.session);
@@ -91,26 +115,37 @@ export default function ShootoutGame() {
     } catch (e) {
       setLoading(false);
       if (e instanceof ApiError && e.status === 404) {
-        // Session was evicted (LRU cap) or otherwise gone — not a user error.
         setUiPhase(PHASE.EXPIRED);
       } else if (e instanceof ApiError && e.status === 0) {
-        // Backend is completely unreachable.
         setUiPhase(PHASE.HARD_ERROR);
       } else {
-        // All other errors: show inline banner, stay on current phase.
         setError(e.message);
-        setUiPhase(prev => prev === PHASE.KEEPING ? PHASE.KEEPING : PHASE.SHOOTING);
+        setUiPhase(prev =>
+          prev === PHASE.KEEPING    ? PHASE.KEEPING    :
+          prev === PHASE.AI_KEEPING ? PHASE.AI_KEEPING :
+          PHASE.SHOOTING
+        );
       }
       return;
     }
     setLoading(false);
   }
 
+  // ── vs_ai: human keeps for the AI's shot ──────────────────────────────────
+  function handleAiKickDive(dive) { submitKick(aiPendingCell, dive); }
+
   // ── After reveal ──────────────────────────────────────────────────────────
   function handleNextKick() {
     setCell(null); setOutcome(null);
     setKickCount(c => c + 1);
-    setUiPhase(PHASE.HANDOFF_SHOOT);
+    // Determine whose kick is next and branch accordingly
+    if (mode === 'vs_ai' && session?.current_team !== humanTeam) {
+      const aiCell = pickRandomCell();
+      setAiCell(aiCell);
+      setUiPhase(PHASE.HANDOFF_AI_KICK);
+    } else {
+      setUiPhase(PHASE.HANDOFF_SHOOT);
+    }
   }
 
   // ── Restart / leave ───────────────────────────────────────────────────────
@@ -119,6 +154,7 @@ export default function ShootoutGame() {
     setSessionId(null); setSession(null); setCell(null);
     setOutcome(null); setAiCounts(null); setError(null);
     setTeamColors({}); setKickCount(0); setConfirmLeave(false);
+    setHumanTeam(null); setAiCell(null);
     setUiPhase(PHASE.SETUP);
   }
 
@@ -152,6 +188,17 @@ export default function ShootoutGame() {
         />
       )}
 
+      {/* vs_ai only: AI kicks, human is about to keep */}
+      {uiPhase === PHASE.HANDOFF_AI_KICK && (
+        <HandoffScreen
+          message="AI is kicking —"
+          name={shooter}
+          subtext="The AI has picked its spot. Get ready to keep."
+          buttonLabel="I'm ready — show the goal"
+          onContinue={() => setUiPhase(PHASE.AI_KEEPING)}
+        />
+      )}
+
       {uiPhase === PHASE.SHOOTING && (
         <div className="kick-screen">
           <div className="kick-top-row">
@@ -164,6 +211,18 @@ export default function ShootoutGame() {
             <AIPanel counts={aiCounts} lastDive={null} />
           )}
           {loading && <p className="loading-note">Resolving…</p>}
+        </div>
+      )}
+
+      {/* vs_ai only: human keeps for AI's shot */}
+      {uiPhase === PHASE.AI_KEEPING && (
+        <div className="kick-screen">
+          <div className="kick-top-row">
+            <button className="leave-btn" onClick={handleLeaveClick} aria-label="Leave shootout">← Leave</button>
+          </div>
+          <Scoreboard session={session} teamColors={teamColors} />
+          <p className="role-label">🧤 {humanTeam} — cover a third of the goal</p>
+          <KeeperPicker onSelect={handleAiKickDive} loading={loading} />
         </div>
       )}
 
@@ -195,7 +254,8 @@ export default function ShootoutGame() {
           session={session}
           teamColors={teamColors}
           onNext={handleNextKick}
-          aiPanel={mode === 'vs_ai' && aiCounts
+          isAiShot={mode === 'vs_ai' && lastOutcome.team !== humanTeam}
+          aiPanel={mode === 'vs_ai' && aiCounts && lastOutcome.team === humanTeam
             ? <AIPanel counts={aiCounts} lastDive={lastOutcome.dive} />
             : null}
         />

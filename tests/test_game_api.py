@@ -89,17 +89,23 @@ class TestModeEnforcement:
         assert data["outcome"]["cell"] == "TL"
         assert data["outcome"]["dive"] in ("L", "C", "R")
 
-    def test_vs_ai_rejects_dive_field(self):
+    def test_vs_ai_accepts_dive_field_for_ai_shot(self):
         """
-        vs_ai mode must REJECT (not silently ignore) a request that includes 'dive'.
-        The wrong call must be impossible, not quietly swallowed.
+        vs_ai mode must ACCEPT a request that includes 'dive' — this signals
+        that the AI is shooting and the human is keeping. The backend uses
+        the supplied dive as the keeper's choice and resolves the kick normally.
+        dive absent  → human shoots, AI keeper picks dive (200 OK)
+        dive present → AI shoots, human keeper supplied dive (200 OK)
         """
         sid = create_session(mode="vs_ai")
         resp = client.post(f"/game/session/{sid}/kick",
                            json={"cell": "TL", "dive": "R"})
-        assert resp.status_code == 422
-        detail = resp.json()["detail"].lower()
-        assert "vs_ai" in detail or "ai" in detail
+        assert resp.status_code == 200
+        data = resp.json()
+        # dive should be echoed back as the supplied value
+        assert data["outcome"]["dive"] == "R"
+        # AI session counts must be present but NOT updated (AI's own shot)
+        assert data["ai_session_counts"] is not None
 
     def test_vs_ai_accepts_cell_only(self):
         """vs_ai mode should accept a request with only 'cell'."""

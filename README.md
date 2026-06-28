@@ -8,11 +8,11 @@
 
 We started where most football AI projects start: penalty prediction. Could we use StatsBomb open data to build a model that tells you where a player tends to shoot?
 
-We actually ran it. We scanned every free competition — 80 competition-seasons, 3,961 matches, 1,481 penalty kicks. Then we looked at the numbers honestly.
+We actually ran it. We scanned every free competition — 3,961 matches across 55 competition-seasons that contained at least one penalty kick — extracting 1,481 penalty kicks in total. Then we looked at the numbers honestly.
 
 **The per-player data is non-representative by design.** StatsBomb's free tier follows club partnerships, not career coverage. Messi appears 83 times (15 La Liga seasons of Barcelona data). Ronaldo appears 23 times — mostly from one full season (2015/16) where La Liga happened to be fully released. A player's "tendency" in this dataset reflects which seasons StatsBomb happened to release, not how they actually kick. Building a per-player predictor on this would have been confident-sounding fiction.
 
-**The base rate IS solid.** Across 363 international shootout kicks: 67% conversion overall. The pressure splits (kick order, ahead/behind, sudden death) all have overlapping confidence intervals — no detectable difference between them at this sample size. The honest finding is that the base rate is knowable and the fine-grained splits are not.
+**The base rate IS solid.** Across 328 international shootout kicks: 66.5% conversion overall. The pressure splits (kick order, ahead/behind, sudden death) all have overlapping confidence intervals — no detectable difference between them at this sample size. The honest finding is that the base rate is knowable and the fine-grained splits are not.
 
 **Penalties are also a mixed-strategy game.** Both shooter and keeper benefit from varying their choices. A model that says "Messi shoots left 70% of the time" is exploitable by any keeper who reads it — which means any competent player already randomises against scouting. There is no prediction to make.
 
@@ -24,7 +24,7 @@ So we built two things that *are* truthful instead.
 
 A 1v1 or vs-AI penalty game grounded in the real distribution of penalty outcomes.
 
-**The probability table** was derived from the observed 67% base rate and validated against a Nash equilibrium analysis:
+**The probability table** was derived from the observed 66.5% base rate:
 
 | Keeper matched? | Shot placement | P(goal) |
 |---|---|---|
@@ -35,11 +35,11 @@ A 1v1 or vs-AI penalty game grounded in the real distribution of penalty outcome
 | Mismatched | Side-mid | 92% |
 | Mismatched | Centre | 85% |
 
-Corners beat a correct dive ~30% of the time. Shooting centre and being matched is a 6% chance. The Nash equilibrium value of the game under these probabilities is 67% — matching the observed real-world rate. Centre is not the best strategy.
+Corners beat a correct dive ~30% of the time. Shooting centre and being matched is a 6% chance. Under uniform random play by both shooter and keeper, the probability table yields a 66.7% conversion rate — matching the observed real-world base rate. Centre is not the best strategy.
 
 **Team and player selection is cosmetic by design.** Names populate the UI from a static squad list. They never enter the resolution function. There are automated tests that assert identical `p_goal` for the same shot placement regardless of which player name is attached. We built this constraint in deliberately because the alternative — faking per-player tendencies — would have been dishonest.
 
-**The AI keeper** (vs-AI mode) uses a first-order Markov model + 50% random floor: it tracks what direction you tended to shoot *after* each of your previous shots this session, predicts your next shot from that, and mixes with uniform randomness. It learns your session habits, not fabricated data about a real player. It cannot be trivially beaten by simple alternating patterns (tested: alternating gives ~52% conversion, below Nash equilibrium, rather than the ~84% that pure frequency-counting gives).
+**The AI keeper** (vs-AI mode) uses a first-order Markov model + 50% random floor: it tracks what direction you tended to shoot *after* each of your previous shots this session, predicts your next shot from that, and mixes with uniform randomness. It learns your session habits, not fabricated data about a real player. It resists simple alternating patterns — the test suite asserts that alternating play (L→R→L→R) stays below ~78% conversion.
 
 ---
 
@@ -85,7 +85,7 @@ Exposes the penalty game backend as MCP tools:
 - `get_session_state` — returns current score and session state
 - `delete_session` — cleans up
 
-Tool schemas are defined in `backend/mcp/tools.py`. The tools enforce the same honesty constraints as the UI: the `submit_kick` tool in vs-AI mode rejects any request that includes a `dive` field, preventing callers from overriding the AI keeper.
+Tool schemas are defined in `backend/mcp/tools.py`. In vs-AI mode, `submit_kick` distinguishes two sub-cases by the presence of the `dive` field: absent → human is shooting, AI keeper picks dive automatically; present → AI is shooting (random target chosen by the frontend), human keeper supplies dive. The AI's own shots are not fed into the pattern model, so only human shot history informs the keeper's learning.
 
 ---
 
@@ -127,7 +127,7 @@ cd frontend && npm install && npm run dev
 **Tests** (engine + API, no backend required):
 ```bash
 python -m pytest tests/ -v
-# 63 tests — covers probability table, AI keeper Markov logic,
+# 63 tests, all passing — covers probability table, AI keeper Markov logic,
 # cosmetic guarantee (player names never affect p_goal), session lifecycle.
 ```
 

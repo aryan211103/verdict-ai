@@ -62,21 +62,26 @@ function MatchupCard({ team, side }) {
 
 /* ── Main setup screen ───────────────────────────────────────────────── */
 export default function SetupScreen({ onDone, loading }) {
-  const [presetId, setPresetId] = useState(PRESETS[0].id);
-  const [customA,  setCustomA]  = useState(defaultCustom());
-  const [customB,  setCustomB]  = useState(defaultCustom());
-  const [mode,     setMode]     = useState('1v1');
+  const [presetId,        setPresetId]        = useState(PRESETS[0].id);
+  const [customA,         setCustomA]         = useState(defaultCustom());
+  const [customB,         setCustomB]         = useState(defaultCustom());
+  const [mode,            setMode]            = useState('1v1');
+  const [humanTeamChoice, setHumanTeamChoice] = useState('A'); // vs_ai: 'A' or 'B'
 
   const preset   = PRESETS.find(p => p.id === presetId);
   const isCustom = presetId === 'custom';
 
-  /* Derived names for the hero matchup title */
+  /* Derived names for the hero matchup title (uppercase) */
   const nameA = isCustom
     ? (customA.team_name?.toUpperCase() || 'TEAM A')
     : preset.teamA.team_name.toUpperCase();
   const nameB = isCustom
     ? (customB.team_name?.toUpperCase() || 'TEAM B')
     : preset.teamB.team_name.toUpperCase();
+
+  /* Natural-case labels for "YOU PLAY AS" buttons */
+  const labelA = isCustom ? (customA.team_name || 'Team A') : preset.teamA.team_name;
+  const labelB = isCustom ? (customB.team_name || 'Team B') : preset.teamB.team_name;
 
   function setCustomName(side, name) {
     const setter = side === 'A' ? setCustomA : setCustomB;
@@ -127,7 +132,10 @@ export default function SetupScreen({ onDone, loading }) {
       colorA = TEAMS.find(t => t.name === preset.teamA.team_name)?.color ?? null;
       colorB = TEAMS.find(t => t.name === preset.teamB.team_name)?.color ?? null;
     }
-    onDone(teamA, teamB, mode, colorA, colorB);
+    const humanTeamName = mode === 'vs_ai'
+      ? (humanTeamChoice === 'A' ? teamA.team_name : teamB.team_name)
+      : null;
+    onDone(teamA, teamB, mode, colorA, colorB, humanTeamName);
   }
 
   return (
@@ -220,15 +228,36 @@ export default function SetupScreen({ onDone, loading }) {
             className={`mode-seg-btn ${mode === 'vs_ai' ? 'active' : ''}`}
             onClick={() => setMode('vs_ai')}
           >
-            🤖&nbsp;&nbsp;vs AI Keeper
+            🤖&nbsp;&nbsp;vs AI
           </button>
         </div>
         {mode === 'vs_ai' && (
           <p className="ai-mode-note">
-            AI keeper learns where you've been shooting this game — half random, half pattern.
+            You play one team fully — shoot and keep. AI plays the other: random shots, adaptive keeper.
           </p>
         )}
       </div>
+
+      {/* ── YOU PLAY AS (vs AI only) ──────────────────────────────────── */}
+      {mode === 'vs_ai' && (
+        <div className="setup-section">
+          <div className="section-eyebrow">You Play As</div>
+          <div className="mode-segment" role="group">
+            <button
+              className={`mode-seg-btn ${humanTeamChoice === 'A' ? 'active' : ''}`}
+              onClick={() => setHumanTeamChoice('A')}
+            >
+              {labelA}
+            </button>
+            <button
+              className={`mode-seg-btn ${humanTeamChoice === 'B' ? 'active' : ''}`}
+              onClick={() => setHumanTeamChoice('B')}
+            >
+              {labelB}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── FOOTER ────────────────────────────────────────────────────── */}
       <div className="setup-footer">

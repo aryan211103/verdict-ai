@@ -7,7 +7,7 @@ const CELL_LABELS = {
 };
 const DIVE_LABELS = { L:'Left', C:'Centre', R:'Right' };
 
-export default function RevealScreen({ outcome, session, teamColors = {}, onNext, aiPanel = null }) {
+export default function RevealScreen({ outcome, session, teamColors = {}, onNext, aiPanel = null, isAiShot = false }) {
   const goal    = outcome.goal;
   const matched = outcome.matched;
   // Keeper guessed wrong AND ball still didn't go in → shooter missed, not a save.
@@ -51,6 +51,9 @@ export default function RevealScreen({ outcome, session, teamColors = {}, onNext
             : `P(goal) was ${(outcome.p_goal * 100).toFixed(0)}% — resolved by a single random draw`
           }
         </div>
+        {isAiShot && (
+          <div className="reveal-row dim">AI shooter: random target — no skill model</div>
+        )}
       </div>
 
       <div className="score-display">

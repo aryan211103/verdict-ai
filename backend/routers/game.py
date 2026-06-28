@@ -165,43 +165,46 @@ def submit_kick(session_id: str, req: SubmitKickRequest) -> SubmitKickResponse:
     Submit one penalty kick.
 
     In 1v1 mode: both cell (shooter's choice) and dive (keeper's choice) required.
-    In vs_ai mode: cell required; dive field is accepted but ignored — AI chooses.
+    In vs_ai mode, two sub-cases:
+      dive absent  → human is shooting; AI keeper picks dive; human shot recorded for pattern learning.
+      dive present → AI is shooting (random pick from frontend); human provides dive; shot NOT recorded
+                     so the AI's random zones never pollute the keeper's Markov model.
 
     Player identity never enters the resolution logic.
     """
     session = _get_session(session_id)
 
-    cell      = Cell(req.cell)
-    ai        = _ai_keepers.get(session_id)
-    is_ai     = ai is not None
+    cell  = Cell(req.cell)
+    ai    = _ai_keepers.get(session_id)
+    is_ai = ai is not None
 
-    # Enforce the mode contract hard — don't silently swallow wrong inputs.
-    if is_ai and req.dive is not None:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "In vs_ai mode the keeper's dive is chosen by the AI. "
-                "Do not supply 'dive' in the request body."
-            ),
-        )
+    # 1v1 always requires dive
     if not is_ai and req.dive is None:
         raise HTTPException(
             status_code=422,
             detail="In 1v1 mode 'dive' is required (L, C, or R).",
         )
 
+    # vs_ai: dive absent → human shoots (AI keeps); dive present → AI shoots (human keeps)
+    human_shot: bool
     if is_ai:
-        dive = ai.dive()
+        if req.dive is None:
+            dive = ai.dive()      # human's kick — AI keeper chooses dive
+            human_shot = True
+        else:
+            dive = Dive(req.dive) # AI's kick — human keeper supplied dive
+            human_shot = False
     else:
-        dive = Dive(req.dive)   # type: ignore[arg-type]  # validated above
+        dive = Dive(req.dive)     # type: ignore[arg-type]  # validated above
+        human_shot = False        # not used for 1v1
 
     try:
         record = session.submit_kick(cell, dive)
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
 
-    # Record the horizontal direction of this shot in the AI's memory (Mode B)
-    if ai is not None:
+    # Feed human shots — and ONLY human shots — into the keeper's pattern model.
+    if ai is not None and human_shot:
         from backend.services.game_engine import _HORIZ
         ai.record_shot(_HORIZ[cell])
 

@@ -97,11 +97,28 @@ export default function SetupScreen({ onDone, loading }) {
     });
   }
 
+  /* ── Custom-team validation ───────────────────────────────────────── */
+  const trimA = customA.team_name.trim();
+  const trimB = customB.team_name.trim();
+  const namesOk = trimA.length >= 2 && trimB.length >= 2
+               && trimA.toLowerCase() !== trimB.toLowerCase();
+  const canStart = !isCustom || namesOk;
+
+  let validationMsg = '';
+  if (isCustom && !canStart) {
+    if (trimA.length < 2 || trimB.length < 2) {
+      validationMsg = 'Enter both team names (at least 2 characters).';
+    } else {
+      validationMsg = 'Team names must be different.';
+    }
+  }
+
   function handleStart() {
+    if (!canStart) return;
     let teamA, teamB, colorA, colorB;
     if (isCustom) {
-      teamA  = { team_name: customA.team_name || 'Team A', players: customA.players.map((p,i) => p || `Player ${i+1}`) };
-      teamB  = { team_name: customB.team_name || 'Team B', players: customB.players.map((p,i) => p || `Player ${i+1}`) };
+      teamA  = { team_name: trimA, players: customA.players.map((p,i) => p.trim() || `Player ${i+1}`) };
+      teamB  = { team_name: trimB, players: customB.players.map((p,i) => p.trim() || `Player ${i+1}`) };
       colorA = customA.color;
       colorB = customB.color;
     } else {
@@ -218,9 +235,10 @@ export default function SetupScreen({ onDone, loading }) {
         <p className="honesty-note">
           Player names are cosmetic labels — they don't affect kick probabilities.
         </p>
-        <button className="start-btn" onClick={handleStart} disabled={loading}>
+        <button className="start-btn" onClick={handleStart} disabled={loading || !canStart}>
           {loading ? 'Starting…' : 'START SHOOTOUT'}
         </button>
+        {validationMsg && <p className="setup-validation-msg">{validationMsg}</p>}
       </div>
 
     </div>

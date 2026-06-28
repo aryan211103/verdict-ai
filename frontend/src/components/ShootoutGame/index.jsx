@@ -34,6 +34,8 @@ export default function ShootoutGame() {
   const [aiCounts,    setAiCounts]   = useState(null);
   const [error,       setError]      = useState(null);
   const [loading,     setLoading]    = useState(false);
+  const [kickCount,   setKickCount]  = useState(0);     // kicks revealed; 0 = no confirm needed
+  const [confirmLeave, setConfirmLeave] = useState(false);
 
   // ── Setup ─────────────────────────────────────────────────────────────────
   async function handleSetupDone(teamA, teamB, chosenMode, colorA, colorB) {
@@ -107,16 +109,22 @@ export default function ShootoutGame() {
   // ── After reveal ──────────────────────────────────────────────────────────
   function handleNextKick() {
     setCell(null); setOutcome(null);
+    setKickCount(c => c + 1);
     setUiPhase(PHASE.HANDOFF_SHOOT);
   }
 
-  // ── Restart ───────────────────────────────────────────────────────────────
+  // ── Restart / leave ───────────────────────────────────────────────────────
   function handleRestart() {
     if (sessionId) api.deleteSession(sessionId).catch(() => {});
     setSessionId(null); setSession(null); setCell(null);
     setOutcome(null); setAiCounts(null); setError(null);
-    setTeamColors({});
+    setTeamColors({}); setKickCount(0); setConfirmLeave(false);
     setUiPhase(PHASE.SETUP);
+  }
+
+  function handleLeaveClick() {
+    if (kickCount === 0) { handleRestart(); }
+    else { setConfirmLeave(true); }
   }
 
   const shooter   = session?.current_team ?? '';
@@ -146,6 +154,9 @@ export default function ShootoutGame() {
 
       {uiPhase === PHASE.SHOOTING && (
         <div className="kick-screen">
+          <div className="kick-top-row">
+            <button className="leave-btn" onClick={handleLeaveClick} aria-label="Leave shootout">← Leave</button>
+          </div>
           <Scoreboard session={session} teamColors={teamColors} />
           <p className="role-label">🎯 {shooter} — pick your spot</p>
           <GoalGrid onSelect={handleCellChosen} />
@@ -169,6 +180,9 @@ export default function ShootoutGame() {
 
       {uiPhase === PHASE.KEEPING && (
         <div className="kick-screen">
+          <div className="kick-top-row">
+            <button className="leave-btn" onClick={handleLeaveClick} aria-label="Leave shootout">← Leave</button>
+          </div>
           <Scoreboard session={session} teamColors={teamColors} />
           <p className="role-label">🧤 Keeper — cover a third of the goal</p>
           <KeeperPicker onSelect={handleDiveChosen} loading={loading} />
@@ -211,6 +225,18 @@ export default function ShootoutGame() {
           actionLabel="Back to Setup"
           onAction={handleRestart}
         />
+      )}
+
+      {confirmLeave && (
+        <div className="leave-confirm-backdrop" onClick={() => setConfirmLeave(false)}>
+          <div className="leave-confirm-card" onClick={e => e.stopPropagation()}>
+            <p className="leave-confirm-msg">Leave shootout? Your progress will be lost.</p>
+            <div className="leave-confirm-btns">
+              <button className="leave-confirm-cancel" onClick={() => setConfirmLeave(false)}>Stay</button>
+              <button className="leave-confirm-go" onClick={handleRestart}>Leave</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
